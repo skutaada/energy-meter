@@ -3,6 +3,7 @@ module backend
 go 1.23.3
 
 require (
+	github.com/gin-contrib/cors v1.7.2
 	github.com/gin-gonic/gin v1.10.0
 	github.com/go-co-op/gocron/v2 v2.12.3
 	gorm.io/driver/sqlite v1.5.6
