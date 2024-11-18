@@ -1,12 +1,17 @@
-FROM golang:1.23.3
+FROM golang:1.23.3 AS base
 
 WORKDIR /app
 
 COPY go.mod go.sum ./
 RUN go mod download
+RUN go mod verify
 
 COPY . .
 
-RUN go build -o ./out/backend
+RUN CGO_ENABLED=1 GOOS=linux go build -o /backend .
 
-CMD ["./out/backend"]
+FROM gcr.io/distroless/base-debian12:latest
+
+COPY --from=base /backend .
+
+ENTRYPOINT ["./backend"]
