@@ -7,14 +7,30 @@ services:
     hostname: energy-backend
     image: energy-backend
     environment:
+      - HOST=0.0.0.0
       - PORT=9999
+    ports:
+      - 9999:9999
     volumes:
       - "./db:/tmp/energy"
+    networks:
+      - energy-internal
   frontend:
     build:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - VITE_APP_BACKEND_ADDRESS=http://energy-backend:9999
+        - VITE_APP_BACKEND_ADDRESS=http://pi.local:9999
     container_name: energy
     hostname: energy
+    networks:
+      - energy-internal
+      - proxy
+
+networks:
+  energy-internal:
+    name: energy-internal
+    driver: bridge
+  proxy:
+    name: proxy
+    external: true

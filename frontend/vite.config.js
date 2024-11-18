@@ -5,15 +5,23 @@ export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd());
   return {
     plugins: [react()],
+    optimizeDeps: {
+      include: ['recharts'],
+    },
     server: {
-      port: 3000,
+      port: 80,
       host: true,
       watch: {
         usePolling: true,
       },
-      esbuild: {
-        target: "esnext",
-        platform: "linux",
+      hmr: {
+	clientHost: "energy.bubliny.at",
+	clientPort: 80,
+      },
+    },
+    build: {
+      commonjsOptions: {
+        include: [/recharts/, /node_modules/],
       },
     },
     define: {

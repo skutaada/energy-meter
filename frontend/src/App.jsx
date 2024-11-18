@@ -26,10 +26,11 @@ function App() {
     fetchData();
   }, []);
 
+  console.log(energyData)
+
   return (
     <main>
       <h1>Prices for the day: {date.toLocaleDateString("de-DE")}</h1>
-      <ResponsiveContainer aspect={4}>
         <LineChart data={energyData}>
           <Line type="monotone" dataKey="value" stroke="#8884d8" />
           <CartesianGrid stroke="#ccc" />
@@ -57,7 +58,6 @@ function App() {
             }}
           />
         </LineChart>
-      </ResponsiveContainer>
     </main>
   );
 }
