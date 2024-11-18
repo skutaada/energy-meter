@@ -3,8 +3,11 @@ package db
 import (
 	"backend/models"
 	"encoding/json"
+	"errors"
 	"net/http"
 	"time"
+
+	"gorm.io/gorm"
 )
 
 func GetLatestEnergy() (*[]models.EnergySpot, error) {
@@ -18,7 +21,10 @@ func GetLatestEnergy() (*[]models.EnergySpot, error) {
 		return nil, err
 	}
 	for _, energy := range energyReadings.Data {
-		DB.Create(&energy)
+		if err := DB.Create(&energy).Error; err != nil {
+			if errors.Is(err, gorm.ErrDuplicatedKey) {
+			}
+		}
 	}
 	return &energyReadings.Data, nil
 }
