@@ -20,19 +20,19 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-        - BACKEND_ADDRESS=http://0.0.0.0:9999
+        - BACKEND_ADDRESS=http://pi.local:9999
     container_name: energy
     hostname: energy
     ports:
       - 8080:8080
     networks:
       - energy-internal
-      # - proxy
+      - proxy
 
 networks:
   energy-internal:
     name: energy-internal
     driver: bridge
-  # proxy:
-  #   name: proxy
-  #   external: true
+  proxy:
+    name: proxy
+    external: true
