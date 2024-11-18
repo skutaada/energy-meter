@@ -1,35 +1,65 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import {
+  LineChart,
+  Line,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const backendUrl =
+    import.meta.env.VITE_APP_BACKEND_ADDRESS ?? "http://0.0.0.0:9999";
+  const [energyData, setEnergyData] = useState([]);
+  const [date, setDate] = useState(new Date());
+
+  useEffect(() => {
+    const currentDate = new Date().toISOString().split("T")[0];
+    const fetchData = async () => {
+      const response = await fetch(`${backendUrl}/energy/${currentDate}`);
+      const json = await response.json();
+      setEnergyData(json);
+    };
+    fetchData();
+  }, []);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <main>
+      <h1>Prices for the day: {date.toLocaleDateString("de-DE")}</h1>
+      <ResponsiveContainer aspect={4}>
+        <LineChart data={energyData}>
+          <Line type="monotone" dataKey="value" stroke="#8884d8" />
+          <CartesianGrid stroke="#ccc" />
+          <XAxis
+            dataKey="date"
+            tickFormatter={(value) => {
+              const date = new Date(value);
+              return date.toLocaleTimeString("de-DE", {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+            }}
+          />
+          <YAxis />
+          <Tooltip
+            formatter={(value, name, props) => {
+              return [`${value} ct/kWh`, "Price"];
+            }}
+            labelFormatter={(label) => {
+              const date = new Date(label);
+              return date.toLocaleTimeString("de-DE", {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+            }}
+          />
+        </LineChart>
+      </ResponsiveContainer>
+    </main>
+  );
 }
 
-export default App
+export default App;
