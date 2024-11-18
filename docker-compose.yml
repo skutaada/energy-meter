@@ -6,6 +6,7 @@ services:
     container_name: energy-backend
     hostname: energy-backend
     image: energy-backend
+    restart: unless-stopped
     environment:
       - HOST=0.0.0.0
       - PORT=9999
@@ -23,8 +24,9 @@ services:
         - BACKEND_ADDRESS=http://pi.local:9999
     container_name: energy
     hostname: energy
-    ports:
-      - 8080:8080
+    restart: unless-stopped
+    depends_on:
+      - backend
     networks:
       - energy-internal
       - proxy
