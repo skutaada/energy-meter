@@ -1,0 +1,10 @@
+services:
+  ebackend:
+    container_name: ebackend
+    image: backend
+    ports:
+      - "9999:9999/tcp"
+    environment:
+      - PORT=9999
+    volumes:
+      - "./db:/tmp/energy"
