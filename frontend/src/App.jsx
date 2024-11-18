@@ -11,7 +11,7 @@ import {
 import "./App.css";
 
 function App() {
-  const backendUrl = import.meta.env.BACKEND_ADDRESS ?? "http://127.0.0.1:9999";
+  const backendUrl = import.meta.env.BACKEND_ADDRESS ?? "http://pi.local:9999";
   const [energyData, setEnergyData] = useState([]);
   const [date, setDate] = useState(new Date());
 
