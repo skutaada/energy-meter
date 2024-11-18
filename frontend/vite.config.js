@@ -6,26 +6,13 @@ export default defineConfig(({ command, mode }) => {
   return {
     plugins: [react()],
     optimizeDeps: {
-      include: ['recharts'],
+      include: ["recharts"],
     },
     server: {
-      port: 80,
-      host: true,
-      watch: {
-        usePolling: true,
-      },
-      hmr: {
-	clientHost: "energy.bubliny.at",
-	clientPort: 80,
-      },
-    },
-    build: {
-      commonjsOptions: {
-        include: [/recharts/, /node_modules/],
-      },
+      port: 8080,
     },
     define: {
-      VITE_APP_BACKEND_ADDRESS: JSON.stringify(env.VITE_APP_BACKEND_ADDRESS),
+      BACKEND_ADDRESS: JSON.stringify(env.BACKEND_ADDRESS),
     },
   };
 });

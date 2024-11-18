@@ -1,11 +1,19 @@
 FROM oven/bun:alpine AS builder
 
 WORKDIR /app
-COPY . .
-ARG VITE_APP_BACKEND_ADDRESS
-ENV VITE_APP_BACKEND_ADDRESS $VITE_APP_BACKEND_ADDRESS
+
+COPY package*.json bun.lockb ./
 RUN bun install
+COPY . .
+ARG BACKEND_ADDRESS
+ENV BACKEND_ADDRESS $BACKEND_ADDRESS
 RUN bun run build
-EXPOSE 80
-CMD ["bunx", "serve", "-l", "tcp://0.0.0.0:80", "-C", "dist"]
+
+FROM nginx:stable-alpine AS production
+
+COPY --from=builder /app/nginx /etc/nginx/conf.d
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 8080
+ENTRYPOINT ["nginx", "-g", "daemon off;"] 
 

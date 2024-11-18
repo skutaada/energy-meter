@@ -11,8 +11,7 @@ import {
 import "./App.css";
 
 function App() {
-  const backendUrl =
-    import.meta.env.VITE_APP_BACKEND_ADDRESS ?? "http://0.0.0.0:9999";
+  const backendUrl = import.meta.env.BACKEND_ADDRESS ?? "http://127.0.0.1:9999";
   const [energyData, setEnergyData] = useState([]);
   const [date, setDate] = useState(new Date());
 
@@ -26,11 +25,12 @@ function App() {
     fetchData();
   }, []);
 
-  console.log(energyData)
+  console.log(energyData);
 
   return (
     <main>
       <h1>Prices for the day: {date.toLocaleDateString("de-DE")}</h1>
+      <ResponsiveContainer width="100%" height={400}>
         <LineChart data={energyData}>
           <Line type="monotone" dataKey="value" stroke="#8884d8" />
           <CartesianGrid stroke="#ccc" />
@@ -58,6 +58,7 @@ function App() {
             }}
           />
         </LineChart>
+      </ResponsiveContainer>
     </main>
   );
 }
