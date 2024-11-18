@@ -1,10 +1,20 @@
 services:
-  ebackend:
-    container_name: ebackend
-    image: backend
-    ports:
-      - "9999:9999/tcp"
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: energy-backend
+    hostname: energy-backend
+    image: energy-backend
     environment:
       - PORT=9999
     volumes:
       - "./db:/tmp/energy"
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_APP_BACKEND_ADDRESS=http://energy-backend:9999
+    container_name: energy
+    hostname: energy
