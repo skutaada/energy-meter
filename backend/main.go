@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	addr := fmt.Sprintf("0.0.0.0:%s", os.Getenv("PORT"))
+	addr := fmt.Sprintf("%s:%s", os.Getenv("HOST"), os.Getenv("PORT"))
 	db.InitDB()
 	s := lib.SetupCron()
 	r := api.GetRouter()
